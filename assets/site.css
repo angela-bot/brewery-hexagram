@@ -54,6 +54,16 @@ a { color: var(--blue); }
 .product-card .product-note { min-height: 3rem; color: var(--muted); font-size: .88rem; line-height: 1.55; }
 .product-card .btn { margin-top: auto; }
 .square-notice { padding: 1.25rem; border-left: 4px solid var(--gold); background: var(--cream); color: var(--muted); font-size: .9rem; line-height: 1.65; }
+.chart-card { overflow: hidden; border: 1px solid var(--line); background: #fff; box-shadow: 12px 12px 0 var(--gold); }
+.chart-card img { display: block; width: 100%; height: auto; }
+.chart-card figcaption { padding: 1rem 1.25rem; color: var(--muted); font-size: .82rem; }
+.youth-resource { display: flex; flex-direction: column; height: 100%; padding: 1.5rem; border: 1px solid var(--line); background: #fff; text-decoration: none; }
+.youth-resource:hover { background: var(--cream); }
+.youth-resource .resource-number { color: var(--red); font-family: Georgia, serif; font-size: 1.4rem; }
+.youth-resource h2 { margin-top: auto; color: var(--navy); font-size: 1.45rem; }
+.youth-resource p { color: var(--muted); }
+.interest-form .form-control { border-color: var(--line); border-radius: 0; padding: .8rem 1rem; }
+.interest-form .form-control:focus { border-color: var(--blue); box-shadow: 0 0 0 .2rem rgba(22,90,131,.12); }
 .notice-bar { color: #fff; background: var(--red); }
 .notice-bar a { color: #fff; font-weight: 800; text-underline-offset: 3px; }
 .notice-label { border-right: 1px solid rgba(255,255,255,.4); font-size: .72rem; font-weight: 900; letter-spacing: .14em; text-transform: uppercase; }

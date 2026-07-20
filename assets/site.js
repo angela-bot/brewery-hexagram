@@ -10,7 +10,7 @@ if (sailingMenu) {
     <li><a class="dropdown-item" href="sailing.html">Programs &amp; Racing</a></li>
     <li><a class="dropdown-item" href="regattas.html">Regattas</a></li>
     <li><a class="dropdown-item" href="capri-club.html">Capri Club</a></li>
-    <li><a class="dropdown-item" href="../archived_site/youth-sailing.html">Youth Sailing</a></li>
+    <li><a class="dropdown-item" href="youth-sailing.html">Youth Sailing</a></li>
   `;
 }
 
