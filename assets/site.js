@@ -14,6 +14,54 @@ if (sailingMenu) {
   `;
 }
 
+// Keep the Our Club dropdown and final utility links identical on every page.
+const mainNavList = document.querySelector('#mainNav .navbar-nav');
+if (mainNavList) {
+  const clubToggle = [...mainNavList.querySelectorAll('.dropdown-toggle')]
+    .find(link => link.textContent.trim().toLowerCase() === 'our club');
+  const clubMenu = clubToggle?.nextElementSibling;
+  if (clubMenu) {
+    clubMenu.innerHTML = `
+      <li><a class="dropdown-item" href="about.html">About Us</a></li>
+      <li><a class="dropdown-item" href="membership.html">Membership</a></li>
+      <li><a class="dropdown-item" href="index.html#newsletter">Jib Sheet</a></li>
+    `;
+  }
+
+  // Remove the former top-level Jib Sheet item.
+  [...mainNavList.children].forEach(item => {
+    const link = item.querySelector(':scope > a');
+    if (link?.getAttribute('href')?.endsWith('#newsletter')) item.remove();
+  });
+
+  let storeLink = mainNavList.querySelector('a[href="shop.html"]');
+  if (!storeLink) {
+    const item = document.createElement('li');
+    item.className = 'nav-item';
+    item.innerHTML = '<a class="nav-link" href="shop.html">Ship\'s Store</a>';
+    mainNavList.appendChild(item);
+    storeLink = item.querySelector('a');
+  }
+  storeLink.textContent = "Ship's Store";
+  storeLink.classList.toggle('active', window.location.pathname.endsWith('/shop.html'));
+
+  let contactLink = [...mainNavList.children]
+    .map(item => item.querySelector(':scope > a[href^="mailto:"]'))
+    .find(Boolean);
+  if (!contactLink) {
+    const item = document.createElement('li');
+    item.className = 'nav-item';
+    item.innerHTML = '<a class="nav-link" href="mailto:web@yaquinabayyachtclub.org">Contact</a>';
+    mainNavList.appendChild(item);
+    contactLink = item.querySelector('a');
+  }
+  contactLink.textContent = 'Contact';
+  contactLink.href = 'mailto:web@yaquinabayyachtclub.org';
+
+  // Always finish with Ship's Store followed by Contact.
+  mainNavList.append(storeLink.closest('li'), contactLink.closest('li'));
+}
+
 // Display fallbacks. The backend replaces these with live Square catalog prices.
 const CATALOG = {
   'membership-household': { label: 'Household Annual Membership', variations: { renewal: { label: 'Annual renewal', priceMoney: { amount: 38000, currency: 'USD' } }, 'new-member': { label: 'New membership with initiation', priceMoney: { amount: 48000, currency: 'USD' } } } },
@@ -85,7 +133,7 @@ if (nav) {
 document.body.insertAdjacentHTML('beforeend', `
   <aside class="offcanvas offcanvas-end cart-offcanvas" tabindex="-1" id="cartDrawer" aria-labelledby="cartDrawerLabel">
     <div class="offcanvas-header"><div><small class="d-block text-white-50 text-uppercase fw-bold mb-1">Secure Square checkout</small><h2 class="offcanvas-title serif" id="cartDrawerLabel">Your cart</h2></div><button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button></div>
-    <div class="offcanvas-body d-flex flex-column"><div id="cartItems"></div><div class="mt-auto pt-4"><div id="discountRow" class="d-none justify-content-between small text-success pb-2"><span>Discounts</span><strong id="cartDiscount">−$0.00</strong></div><div class="d-flex justify-content-between align-items-center border-top pt-3"><span class="fw-bold">Total</span><span class="cart-total" id="cartTotal">$0.00</span></div><p class="small text-secondary mt-2" id="cartStatus">Connecting to Square for current pricing…</p><div class="d-grid gap-2 mt-3"><button type="button" class="btn btn-ybyc btn-red" id="squareCheckout" disabled>Checkout securely with Square</button><a href="shop.html" class="btn btn-ybyc btn-outline-navy">Browse all purchases</a><button type="button" class="btn btn-sm btn-link text-secondary" id="clearCart">Clear cart</button></div></div></div>
+    <div class="offcanvas-body d-flex flex-column"><div id="cartItems"></div><div class="mt-auto pt-4"><div id="discountRow" class="d-none justify-content-between small text-success pb-2"><span>Discounts</span><strong id="cartDiscount">−$0.00</strong></div><div class="d-flex justify-content-between align-items-center border-top pt-3"><span class="fw-bold">Total</span><span class="cart-total" id="cartTotal">$0.00</span></div><p class="small text-secondary mt-2" id="cartStatus">Connecting to Square for current pricing…</p><div class="d-grid gap-2 mt-3"><button type="button" class="btn btn-ybyc btn-red" id="squareCheckout" disabled>Checkout securely with Square</button><a href="shop.html" class="btn btn-ybyc btn-outline-navy">Browse Ship's Store</a><button type="button" class="btn btn-sm btn-link text-secondary" id="clearCart">Clear cart</button></div></div></div>
   </aside>`);
 
 function fallbackTotal() {
@@ -100,7 +148,7 @@ function renderCart() {
   const items = document.getElementById('cartItems');
   if (!items) return;
   if (!entries.length) {
-    items.innerHTML = '<div class="text-center py-5"><p class="serif fs-4 text-secondary">Your cart is empty.</p><a href="shop.html" class="btn btn-ybyc btn-outline-navy">Visit the shop</a></div>';
+    items.innerHTML = '<div class="text-center py-5"><p class="serif fs-4 text-secondary">Your cart is empty.</p><a href="shop.html" class="btn btn-ybyc btn-outline-navy">Visit Ship\'s Store</a></div>';
   } else {
     items.innerHTML = entries.map(([value, quantity]) => {
       const { product, variation } = productInfo(value);
