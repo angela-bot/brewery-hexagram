@@ -97,6 +97,14 @@ a { color: var(--blue); }
 .video-frame { padding-top: 56.25%; }
 .video-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; }
 .calendar-frame iframe { display: block; width: 100%; min-height: 650px; }
+.results-frame { overflow: hidden; border: 1px solid var(--line); background: #fff; box-shadow: 10px 10px 0 var(--gold); }
+.results-frame iframe { display: block; width: 100%; min-height: 620px; border: 0; }
+.race-day { height: 100%; border: 1px solid var(--line); background: #fff; }
+.race-day-header { display: flex; align-items: center; gap: 1rem; padding: 1.25rem 1.5rem; color: #fff; background: var(--navy); }
+.race-day-date { display: grid; place-items: center; flex: 0 0 64px; min-height: 64px; padding: .35rem; border: 1px solid rgba(255,255,255,.5); font-family: Georgia, serif; font-size: 1.35rem; line-height: 1.05; text-align: center; }
+.race-day-date small { display: block; margin-top: .3rem; font-family: Arial, sans-serif; font-size: .58rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+.race-day-body { padding: 1rem 1.5rem 1.5rem; }
+.race-day-body .detail-row { grid-template-columns: 105px 1fr; }
 .map-frame iframe { display: block; width: 100%; min-height: 360px; }
 .clubhouse-carousel { max-width: 760px; margin-inline: auto; border: 1px solid var(--line); background: var(--navy); box-shadow: 14px 14px 0 var(--gold); }
 .clubhouse-carousel .carousel-item img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
@@ -157,6 +165,8 @@ footer a:hover { text-decoration: underline; }
   .board-card .list-group-item { display: block; }
   .board-card .name { display: block; margin-top: .25rem; text-align: left; }
   .calendar-frame iframe { min-height: 560px; }
+  .results-frame iframe { min-height: 520px; }
+  .race-day-body .detail-row { grid-template-columns: 1fr; }
   .capri-banner img { min-height: 0; object-fit: contain; }
   .capri-carousel .carousel-item img { height: 480px; }
 }

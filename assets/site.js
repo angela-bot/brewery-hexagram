@@ -14,6 +14,24 @@ if (sailingMenu) {
   `;
 }
 
+// Events has dedicated pages as well as the complete club calendar.
+const eventPages = ['events.html', 'spring-regatta.html', 'wednesday-night-racing.html', 'centerboard-slam.html', 'fall-regatta.html'];
+const eventsToggle = [...document.querySelectorAll('#mainNav a')]
+  .find(link => link.textContent.trim() === 'Events');
+const eventsItem = eventsToggle?.closest('.nav-item');
+if (eventsItem) {
+  const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+  eventsItem.className = 'nav-item dropdown';
+  eventsItem.innerHTML = `
+    <a class="nav-link dropdown-toggle${eventPages.includes(currentPage) ? ' active' : ''}" href="events.html" role="button" data-bs-toggle="dropdown" aria-expanded="false">Events</a>
+    <ul class="dropdown-menu">
+      <li><a class="dropdown-item" href="spring-regatta.html">Spring Regatta</a></li>
+      <li><a class="dropdown-item" href="wednesday-night-racing.html">Wednesday Night Racing</a></li>
+      <li><a class="dropdown-item" href="centerboard-slam.html">Centerboard Slam</a></li>
+      <li><a class="dropdown-item" href="fall-regatta.html">Fall Regatta</a></li>
+    </ul>`;
+}
+
 // Keep the Our Club dropdown and final utility links identical on every page.
 const mainNavList = document.querySelector('#mainNav .navbar-nav');
 if (mainNavList) {
