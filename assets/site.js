@@ -34,76 +34,26 @@ if (raceDateNodes.length) {
   });
 }
 
-// Shared navigation.
-const sailingToggle = [...document.querySelectorAll('#mainNav .dropdown-toggle')]
-  .find(link => link.textContent.trim() === 'Sailing');
-const sailingMenu = sailingToggle?.nextElementSibling;
-if (sailingMenu) {
-  sailingMenu.innerHTML = `
-    <li><a class="dropdown-item" href="sailing.html">Programs &amp; Racing</a></li>
-    <li><a class="dropdown-item" href="regattas.html">Regattas</a></li>
-    <li><a class="dropdown-item" href="capri-club.html">Capri Club</a></li>
-    <li><a class="dropdown-item" href="youth-sailing.html">Youth Sailing</a></li>
-  `;
-}
-
-// Events has dedicated pages as well as the complete club calendar.
-const eventPages = ['events.html', 'spring-regatta.html', 'wednesday-night-racing.html', 'centerboard-slam.html', 'fall-regatta.html'];
-const eventsToggle = [...document.querySelectorAll('#mainNav a')]
-  .find(link => link.textContent.trim() === 'Events');
-const eventsItem = eventsToggle?.closest('.nav-item');
-if (eventsItem) {
-  const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-  eventsItem.className = 'nav-item dropdown';
-  eventsItem.innerHTML = `
-    <a class="nav-link dropdown-toggle${eventPages.includes(currentPage) ? ' active' : ''}" href="events.html" role="button" data-bs-toggle="dropdown" aria-expanded="false">Events</a>
-    <ul class="dropdown-menu">
-      <li><a class="dropdown-item" href="spring-regatta.html">Spring Regatta</a></li>
-      <li><a class="dropdown-item" href="wednesday-night-racing.html">Wednesday Night Racing</a></li>
-      <li><a class="dropdown-item" href="centerboard-slam.html">Centerboard Slam</a></li>
-      <li><a class="dropdown-item" href="fall-regatta.html">Fall Regatta</a></li>
-    </ul>`;
-}
-
-// Keep the Our Club dropdown and final Ship's Store link identical on every page.
-const mainNavList = document.querySelector('#mainNav .navbar-nav');
-if (mainNavList) {
-  const clubToggle = [...mainNavList.querySelectorAll('.dropdown-toggle')]
-    .find(link => link.textContent.trim().toLowerCase() === 'our club');
-  const clubMenu = clubToggle?.nextElementSibling;
-  if (clubMenu) {
-    clubMenu.innerHTML = `
-      <li><a class="dropdown-item" href="about.html">About Us</a></li>
-      <li><a class="dropdown-item" href="membership.html">Membership</a></li>
-      <li><a class="dropdown-item" href="index.html#newsletter">Jib Sheet</a></li>
-    `;
-  }
-
-  // Remove the former top-level Jib Sheet item.
-  [...mainNavList.children].forEach(item => {
-    const link = item.querySelector(':scope > a');
-    if (link?.getAttribute('href')?.endsWith('#newsletter')) item.remove();
-  });
-
-  let storeLink = mainNavList.querySelector('a[href="shop.html"]');
-  if (!storeLink) {
-    const item = document.createElement('li');
-    item.className = 'nav-item';
-    item.innerHTML = '<a class="nav-link" href="shop.html">Ship\'s Store</a>';
-    mainNavList.appendChild(item);
-    storeLink = item.querySelector('a');
-  }
-  storeLink.textContent = "Ship's Store";
-  storeLink.classList.toggle('active', window.location.pathname.endsWith('/shop.html'));
-
-  // Remove the former top-level Contact item while preserving email links elsewhere.
-  [...mainNavList.children].forEach(item => {
-    const link = item.querySelector(':scope > a');
-    if (link?.textContent.trim().toLowerCase() === 'contact') item.remove();
-  });
-
-  // Always finish with Ship's Store.
-  mainNavList.append(storeLink.closest('li'));
+// Build the shared navigation from one source instead of duplicating it in every page.
+const navMount = document.querySelector('[data-site-nav]');
+const currentPageName = window.location.pathname.split('/').pop() || 'index.html';
+const navActive = pages => pages.includes(currentPageName) ? ' active' : '';
+if (navMount) {
+  navMount.outerHTML = `
+    <nav class="navbar navbar-expand-lg main-nav sticky-top" aria-label="Primary navigation">
+      <div class="container-xl px-4">
+        <a class="navbar-brand d-lg-none serif fw-bold" href="index.html">YBYC</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse" id="mainNav"><ul class="navbar-nav">
+          <li class="nav-item"><a class="nav-link${navActive(['index.html'])}" href="index.html">Home</a></li>
+          <li class="nav-item dropdown"><a class="nav-link dropdown-toggle${navActive(['about.html', 'membership.html'])}" href="about.html" role="button" data-bs-toggle="dropdown" aria-expanded="false">Our Club</a><ul class="dropdown-menu"><li><a class="dropdown-item" href="about.html">About Us</a></li><li><a class="dropdown-item" href="membership.html">Membership</a></li><li><a class="dropdown-item" href="index.html#newsletter">Jib Sheet</a></li></ul></li>
+          <li class="nav-item dropdown"><a class="nav-link dropdown-toggle${navActive(['sailing.html', 'regattas.html', 'capri-club.html', 'youth-sailing.html'])}" href="sailing.html" role="button" data-bs-toggle="dropdown" aria-expanded="false">Sailing</a><ul class="dropdown-menu"><li><a class="dropdown-item" href="sailing.html">Programs &amp; Racing</a></li><li><a class="dropdown-item" href="regattas.html">Regattas</a></li><li><a class="dropdown-item" href="capri-club.html">Capri Club</a></li><li><a class="dropdown-item" href="youth-sailing.html">Youth Sailing</a></li></ul></li>
+          <li class="nav-item dropdown"><a class="nav-link dropdown-toggle${navActive(['events.html', 'spring-regatta.html', 'wednesday-night-racing.html', 'centerboard-slam.html', 'fall-regatta.html'])}" href="events.html" role="button" data-bs-toggle="dropdown" aria-expanded="false">Events</a><ul class="dropdown-menu"><li><a class="dropdown-item" href="spring-regatta.html">Spring Regatta</a></li><li><a class="dropdown-item" href="wednesday-night-racing.html">Wednesday Night Racing</a></li><li><a class="dropdown-item" href="centerboard-slam.html">Centerboard Slam</a></li><li><a class="dropdown-item" href="fall-regatta.html">Fall Regatta</a></li></ul></li>
+          <li class="nav-item"><a class="nav-link${navActive(['clubhouse.html'])}" href="clubhouse.html">Clubhouse</a></li>
+          <li class="nav-item"><a class="nav-link${navActive(['shop.html'])}" href="shop.html">Ship's Store</a></li>
+        </ul></div>
+      </div>
+    </nav>`;
 }
 
 // Display fallbacks. The backend replaces these with live Square catalog prices.
