@@ -1,7 +1,7 @@
 const year = document.getElementById('year');
 if (year) year.textContent = new Date().getFullYear();
 
-// Race dates are maintained in one editable JSON file and inserted into event pages.
+// Race dates are maintained in assets/current-races.js and inserted into event pages.
 const raceDateNodes = [...document.querySelectorAll('[data-race-date]')];
 if (raceDateNodes.length) {
   const parseRaceDate = value => new Date(`${value}T12:00:00`);
@@ -18,25 +18,20 @@ if (raceDateNodes.length) {
     if (first.year === last.year) return `${first.month} ${first.day}–${last.month} ${last.day}, ${first.year}`;
     return `${first.month} ${first.day}, ${first.year}–${last.month} ${last.day}, ${last.year}`;
   };
-  fetch('config/current_races.json', { headers: { Accept: 'application/json' } })
-    .then(response => {
-      if (!response.ok) throw new Error('Race dates unavailable');
-      return response.json();
-    })
-    .then(races => raceDateNodes.forEach(node => {
-      const [raceKey, dateKey = 'start'] = node.dataset.raceDate.split(':');
-      const race = races[raceKey];
-      if (!race?.[dateKey]) return;
-      const date = parseRaceDate(race[dateKey]);
-      const parts = dateParts(date);
-      const format = node.dataset.raceDateFormat || 'long';
-      if (format === 'card') node.innerHTML = `${parts.day}<small>${parts.month}</small>`;
-      else if (format === 'weekday-year') node.textContent = `${parts.weekday} · ${parts.year}`;
-      else if (format === 'range') node.textContent = rangeText(parseRaceDate(race.start), parseRaceDate(race.end));
-      else if (format === 'schedule') node.textContent = `${rangeText(parseRaceDate(race.start), parseRaceDate(race.end))} schedule`;
-      else node.textContent = date.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
-    }))
-    .catch(() => {});
+  const races = window.YBYC_RACE_DATES || {};
+  raceDateNodes.forEach(node => {
+    const [raceKey, dateKey = 'start'] = node.dataset.raceDate.split(':');
+    const race = races[raceKey];
+    if (!race?.[dateKey]) return;
+    const date = parseRaceDate(race[dateKey]);
+    const parts = dateParts(date);
+    const format = node.dataset.raceDateFormat || 'long';
+    if (format === 'card') node.innerHTML = `${parts.day}<small>${parts.month}</small>`;
+    else if (format === 'weekday-year') node.textContent = `${parts.weekday} · ${parts.year}`;
+    else if (format === 'range') node.textContent = rangeText(parseRaceDate(race.start), parseRaceDate(race.end));
+    else if (format === 'schedule') node.textContent = `${rangeText(parseRaceDate(race.start), parseRaceDate(race.end))} schedule`;
+    else node.textContent = date.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+  });
 }
 
 // Shared navigation.

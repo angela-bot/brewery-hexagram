@@ -144,6 +144,8 @@ a { color: var(--blue); }
 .price-card { height: 100%; padding: 1.6rem; border: 1px solid var(--line); background: #fff; }
 .price-card.featured { border-top: 5px solid var(--red); }
 .price-card .price { color: var(--navy); font-family: Georgia, serif; font-size: 2.5rem; }
+.photo-placeholder { display: grid; place-items: center; min-height: 240px; padding: 2rem; border: 2px dashed #aeb6c5; color: var(--muted); background: var(--cream); text-align: center; }
+.photo-placeholder::before { content: "Photo coming soon"; font-family: Georgia, serif; font-size: 1.35rem; color: var(--navy); }
 .resource-link { display: flex; justify-content: space-between; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--line); color: var(--navy); font-weight: 800; text-decoration: none; }
 .resource-link:hover { color: var(--red); }
 .cta-band { color: #fff; background: var(--red); }
