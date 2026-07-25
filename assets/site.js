@@ -65,7 +65,7 @@ if (eventsItem) {
     </ul>`;
 }
 
-// Keep the Our Club dropdown and final utility links identical on every page.
+// Keep the Our Club dropdown and final Ship's Store link identical on every page.
 const mainNavList = document.querySelector('#mainNav .navbar-nav');
 if (mainNavList) {
   const clubToggle = [...mainNavList.querySelectorAll('.dropdown-toggle')]
@@ -96,21 +96,14 @@ if (mainNavList) {
   storeLink.textContent = "Ship's Store";
   storeLink.classList.toggle('active', window.location.pathname.endsWith('/shop.html'));
 
-  let contactLink = [...mainNavList.children]
-    .map(item => item.querySelector(':scope > a[href^="mailto:"]'))
-    .find(Boolean);
-  if (!contactLink) {
-    const item = document.createElement('li');
-    item.className = 'nav-item';
-    item.innerHTML = '<a class="nav-link" href="mailto:web@yaquinabayyachtclub.org">Contact</a>';
-    mainNavList.appendChild(item);
-    contactLink = item.querySelector('a');
-  }
-  contactLink.textContent = 'Contact';
-  contactLink.href = 'mailto:web@yaquinabayyachtclub.org';
+  // Remove the former top-level Contact item while preserving email links elsewhere.
+  [...mainNavList.children].forEach(item => {
+    const link = item.querySelector(':scope > a');
+    if (link?.textContent.trim().toLowerCase() === 'contact') item.remove();
+  });
 
-  // Always finish with Ship's Store followed by Contact.
-  mainNavList.append(storeLink.closest('li'), contactLink.closest('li'));
+  // Always finish with Ship's Store.
+  mainNavList.append(storeLink.closest('li'));
 }
 
 // Display fallbacks. The backend replaces these with live Square catalog prices.
