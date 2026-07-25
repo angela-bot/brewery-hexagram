@@ -112,7 +112,7 @@ a { color: var(--blue); }
 .clubhouse-carousel .carousel-caption p { margin: 0; font-size: .85rem; font-weight: 700; }
 .clubhouse-carousel .carousel-control-prev, .clubhouse-carousel .carousel-control-next { width: 12%; }
 .media-caption { padding: .9rem 1rem; color: rgba(255,255,255,.72); background: var(--navy); font-size: .8rem; }
-.board-card { height: 100%; border: 1px solid var(--line); border-radius: 0; }
+.board-card { border: 1px solid var(--line); border-radius: 0; }
 .board-card .card-header { padding: .85rem 1rem; color: #fff; background: var(--navy); border-radius: 0; font-size: .7rem; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; }
 .board-card .list-group-item { display: flex; justify-content: space-between; gap: 1rem; padding: .9rem 1rem; border-color: var(--line); }
 .board-card .role { color: var(--muted); font-size: .88rem; }
