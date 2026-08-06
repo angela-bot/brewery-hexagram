@@ -1,61 +1,6 @@
 const year = document.getElementById('year');
 if (year) year.textContent = new Date().getFullYear();
 
-// Race dates are maintained in assets/current-races.js and inserted into event pages.
-const raceDateNodes = [...document.querySelectorAll('[data-race-date]')];
-if (raceDateNodes.length) {
-  const parseRaceDate = value => new Date(`${value}T12:00:00`);
-  const dateParts = date => ({
-    weekday: date.toLocaleDateString('en-US', { weekday: 'long' }),
-    month: date.toLocaleDateString('en-US', { month: 'long' }),
-    day: date.getDate(),
-    year: date.getFullYear()
-  });
-  const rangeText = (start, end) => {
-    const first = dateParts(start);
-    const last = dateParts(end);
-    if (first.year === last.year && first.month === last.month) return `${first.month} ${first.day}–${last.day}, ${first.year}`;
-    if (first.year === last.year) return `${first.month} ${first.day}–${last.month} ${last.day}, ${first.year}`;
-    return `${first.month} ${first.day}, ${first.year}–${last.month} ${last.day}, ${last.year}`;
-  };
-  const races = window.YBYC_RACE_DATES || {};
-  raceDateNodes.forEach(node => {
-    const [raceKey, dateKey = 'start'] = node.dataset.raceDate.split(':');
-    const race = races[raceKey];
-    if (!race?.[dateKey]) return;
-    const date = parseRaceDate(race[dateKey]);
-    const parts = dateParts(date);
-    const format = node.dataset.raceDateFormat || 'long';
-    if (format === 'card') node.innerHTML = `${parts.day}<small>${parts.month}</small>`;
-    else if (format === 'weekday-year') node.textContent = `${parts.weekday} · ${parts.year}`;
-    else if (format === 'range') node.textContent = rangeText(parseRaceDate(race.start), parseRaceDate(race.end));
-    else if (format === 'schedule') node.textContent = `${rangeText(parseRaceDate(race.start), parseRaceDate(race.end))} schedule`;
-    else node.textContent = date.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
-  });
-}
-
-// Build the shared navigation from one source instead of duplicating it in every page.
-const navMount = document.querySelector('[data-site-nav]');
-const currentPageName = window.location.pathname.split('/').pop() || 'index.html';
-const navActive = pages => pages.includes(currentPageName) ? ' active' : '';
-if (navMount) {
-  navMount.outerHTML = `
-    <nav class="navbar navbar-expand-lg main-nav sticky-top" aria-label="Primary navigation">
-      <div class="container-xl px-4">
-        <a class="navbar-brand d-lg-none serif fw-bold" href="index.html">YBYC</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-        <div class="collapse navbar-collapse" id="mainNav"><ul class="navbar-nav">
-          <li class="nav-item"><a class="nav-link${navActive(['index.html'])}" href="index.html">Home</a></li>
-          <li class="nav-item dropdown"><a class="nav-link dropdown-toggle${navActive(['about.html', 'membership.html', 'our-fleet.html'])}" href="about.html" role="button" data-bs-toggle="dropdown" aria-expanded="false">Our Club</a><ul class="dropdown-menu"><li><a class="dropdown-item" href="about.html">About Us</a></li><li><a class="dropdown-item" href="membership.html">Membership</a></li><li><a class="dropdown-item" href="our-fleet.html">Our Fleet</a></li><li><a class="dropdown-item" href="index.html#newsletter">Jib Sheet</a></li></ul></li>
-          <li class="nav-item dropdown"><a class="nav-link dropdown-toggle${navActive(['sailing.html', 'adult-sailing.html', 'youth-sailing.html'])}" href="sailing.html" role="button" data-bs-toggle="dropdown" aria-expanded="false">Sailing</a><ul class="dropdown-menu"><li><a class="dropdown-item" href="sailing.html">Programs &amp; Racing</a></li><li><a class="dropdown-item" href="adult-sailing.html">Adult Sailing</a></li><li><a class="dropdown-item" href="youth-sailing.html">Youth Sailing</a></li></ul></li>
-          <li class="nav-item dropdown"><a class="nav-link dropdown-toggle${navActive(['events.html', 'spring-regatta.html', 'wednesday-night-racing.html', 'summer-sailstice.html', 'centerboard-slam.html', 'fall-regatta.html'])}" href="events.html" role="button" data-bs-toggle="dropdown" aria-expanded="false">Events</a><ul class="dropdown-menu"><li><a class="dropdown-item" href="spring-regatta.html">Spring Regatta</a></li><li><a class="dropdown-item" href="wednesday-night-racing.html">Wednesday Night Racing</a></li><li><a class="dropdown-item" href="summer-sailstice.html">Summer Sailstice</a></li><li><a class="dropdown-item" href="centerboard-slam.html">Centerboard Slam</a></li><li><a class="dropdown-item" href="fall-regatta.html">Fall Regatta</a></li></ul></li>
-          <li class="nav-item"><a class="nav-link${navActive(['clubhouse.html'])}" href="clubhouse.html">Clubhouse</a></li>
-          <li class="nav-item"><a class="nav-link${navActive(['shop.html'])}" href="shop.html">Ship's Store</a></li>
-        </ul></div>
-      </div>
-    </nav>`;
-}
-
 // Display fallbacks. The backend replaces these with live Square catalog prices.
 const CATALOG = {
   'membership-household': { label: 'Household Annual Membership', variations: { renewal: { label: 'Annual renewal', priceMoney: { amount: 38000, currency: 'USD' } }, 'new-member': { label: 'New membership with initiation', priceMoney: { amount: 48000, currency: 'USD' } } } },
